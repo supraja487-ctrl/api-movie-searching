@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        body {
+            margin: 20px;
+            padding: 20px;
+            background-color: aliceblue;
+            font-family: Arial, sans-serif;
+        }
+        #movieTitle {
+            width: 300px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px;
+            background-color: green;
+            color: white;
+            width: 100px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #moviedata {
+            width: 400px;
+            background-color: #f0f8ff;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 200px;
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search</h1>
+    <input type="text" id="movieTitle" placeholder="Enter movie title" />
+    <button onclick="searchMovie()" style="background-color: green; color: #f4f4f4;">Search</button>
+    <div id="movieData"></div>
+    <script>
+        const apiKey = '76d079f0';
+
+async function searchMovie() {
+    const movieTitle = document.getElementById('movieTitle').value;
+    const url = `https://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${apiKey}`;
+    // console.log(url)
+
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data)
+    
+    const movieDataDiv = document.getElementById('movieData');
+    
+    if (data.Response === "True") {
+        movieDataDiv.innerHTML = `
+            <h2>(${data.Title}) (${data.Year})</h2>
+            <img src="${data.Poster}" alt="${data.Title} Poster" />
+            <p><strong>Genre:</strong> ${data.Genre}</p>
+            <p><strong>Plot:</strong> ${data.Plot}</p>
+            <p><strong>Director:</strong> ${data.Director}</p>
+            <p><strong>Actors:</strong> ${data.Actors}</p>
+        
+             
+        `;
+    } else {
+        movieDataDiv.innerHTML = `<p>${data.Error}</p>`;
+        
+    }
+}
+    </script>
+</body>
+</html>    
